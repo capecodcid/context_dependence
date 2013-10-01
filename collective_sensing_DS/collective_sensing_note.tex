@@ -1,0 +1,215 @@
+\documentclass{article}
+\usepackage[margin=2.6cm]{geometry}
+
+\geometry{letterpaper}
+
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{dblfloatfix}
+\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\newcommand{\pa}{\partial}
+
+
+\newcommand{\x}{{\bf x}}
+\newcommand{\h}{{\bf h}}
+\newcommand{\Z}{{\cal Z}}
+\newcommand{\N}{{\cal N}}
+\newcommand{\R}{{\cal R}}
+\newcommand{\F}{{\cal F}}
+\newcommand{\Ft}{{\cal F}_{\theta}}
+\newcommand{\Zt}{{\cal Z}_{\theta}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\Et}{\mathcal{E}_{\theta}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bx}{{\bf b}}
+\newcommand{\ch}{{\bf c}}
+\newcommand{\W}{{\bf W}}
+\newcommand{\U}{{\bf U}}
+\newcommand{\V}{{\bf V}}
+\newcommand{\bT}{{\bf b}^{T}}
+\newcommand{\cT}{{\bf c}^{T}}
+\newcommand{\xT}{{\bf x}^{T}}
+\newcommand{\hT}{{\bf h}^{T}}
+\newcommand{\xtilde}{\tilde{\x}}
+\newcommand{\ptheta}{\pa{\theta}}
+
+\newcommand{\la}{\left\langle}
+\newcommand{\ra}{\right\rangle}
+\newcommand{\defeq}{\mathrel{\mathop:}=}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+
+
+
+\title{Collective Sensing}
+
+\author{\textbf{ATH and DS} \\}
+
+\date{September 3, 2013}
+
+\begin{document}
+
+\maketitle
+
+\captionsetup{labelfont=bf, font=footnotesize}
+
+ 
+
+%\textbf{In recent work examining consensus dynamics }
+
+ 
+
+\vspace{10pt}
+
+\hrule  %Horizontal Line
+
+\vspace{10pt}
+
+ 
+
+%\begin{multicols}{2}
+%document goes here
+
+\subsection*{Introduction}
+
+Recent experimental and theoretical work in the field of collective behavior has highlighted the informational and computational benefits of group living.  In addition to diluting risk and increasing the availability of mates, living in social collectives allows organisms to make decisions or solve problems that are impossible at the individual level.\footnotemark  Examples include the ability of eusocial insects to make accurate assessments of different nest sites (though the are never compared by a given individual) and the ability of fish shoals to make consensus decision amidst conflict.  The majority of these studies, however, have been concerned with the intelligence of the group.  In this note I would like to flip our focus---investigating the informational benefits available to the individual. \\
+\\
+Specifically we will take the case where an individual is attempting to measure an environmental signal $\psi \in \R$, but has limited accuracy due to noisy sensing $y_{i}^{t=0} = \N(\psi,\sigma)$.  Galton's \emph{wisdom of the crowds} suggests that one could beat down this noise by a factor of $\frac{1}{\sqrt{N}}$ simply by talking with $N$ other individuals also trying to measure $\psi$.  This, however, requires that draw independent measurements from $\N(\psi,\sigma)$ and that they can communicate their measurement perfectly.  Here we focus on relaxing that second assumption.  What if inter-individual communication is noisy?   Or has a limited bandwidth?  What happens to an individuals ability to beat down its original sensory noise?    \\
+\\
+In this note, we will introduce a simple and intuitive model and present some very basic results for a couple of (again basic) scenarios.  Lastly we will present some interesting future questions and research directions. 
+
+\footnotetext{I would argue that this has been the most important evolutionary driver for social grouping.}
+
+
+\subsection*{Toy Model}
+
+To better frame the questions above we have prescribed a toy model with simple and intuitive dynamics.  In our model we have $N$ agents which each have an internal estimate $y_i$ of the true signal $\psi$.  Before interacting with others, each agent arrives at an independent estimate $y_i^0$ of the signal which is unbiased but noisy:
+\be
+y_{i}^{t=0} = \N(\psi,\sigma)
+\ee
+On can think of these $y^0$s as a single measurement or some sort of expectation that each individual arrives at from accrued sensory information.  At this point we can think of $\sigma$ as a source of quenched noise.  Agents then are begin speaking with one another in order to arrive at a better estimate.  In our simplest scenario we can think of a simple linear update (much like a linear filter):
+\be
+\label{dynamics}
+y_{i}^{t+1} = (1-k)y_i^t + k\lp \frac{1}{N}\sum_{i}{y_{i}^{t}} + \eta \rp
+\ee
+where $\eta = \N(0,\sigma_{w})$ is our dynamic, communication noise and $(1-k)$ is a behavioral inertia.  Clearly, this represents an oversimplified reality as here we gather information and then communicate, however we think it is both illustrative and informative.  The interesting regime is where the quenched noise is greater than the communication noise which is greater than the quenched noise beat down by $1/\sqrt{N}$.  Several features of eq. \ref{dynamics} should immediately be clear.  First, there is nothing anchoring agents to the original signal so for $\sigma_{w} > 0$ we will eventually drift off and entirely lose $\psi$.  This is entirely analogous to the children's game telephone.   We could easily add another term to eq. \ref{dynamics}, but for now we will use the noise to set our timescale.  Second, the dynamics will take every agent to the same average value, so everyone ends up with the same answer.  In other words, after sufficient time, the informational content of a given agent is the same as that of the entire population.
+
+\subsection*{Basic Results}
+
+Given such a simple model, we can first ask some very basic questions.  How much information does the population mean (the wisdom of the crowd) contain about the true signal?  What about an individual's estimate?  To investigate this we begin with a simple prior in which $\psi = \pm \epsilon$ with equal probability.  In other words, this is a one bit problem.  We set $\sigma$ such that our initial SNR $\approx 1/8$ and $\sigma_w \approx \sigma/4$. 
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6.5in]{/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/figs/ind_vs_bar_n_25.png}
+\caption{\label{fig:fig1} The information of the estimate of a single individual is shown in blue while the information of the mean estimate of 25 agents is shown in red.  A single agent, given his measurement alone has much less than $0.1$ bits.  The population mean, however contains more than $0.6$ bits.  Over time the population information decays away due to communication noise.  In contrast, individual estimates tend to get better, until they are forced down by the decaying population information.  This maximum sets an ideal timescale for communication.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6.5in]{/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/figs/infoBar_n_1_12_100.png}
+\caption{\label{fig:fig2} The information in the population mean is shown for groups of 1, 12, and 100.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6.5in]{/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/figs/info3_n_1_12_100.png}
+\caption{\label{fig:fig3} The information in the a random agent's estimate is shown for groups of 1, 12, and 100.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6.5in]{/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/figs/info3_infoBar_Nscan.png}
+\caption{\label{fig:fig4} The maximum information given by the population mean and a given individual is shown for a variety of group sizes.  Both mutual informations increase with N, however the gap between individual and group becomes larger at large Ns.}
+\end{figure}
+
+\subsection*{Next Steps}
+In the framework we have presented above, a single agent arrives at a more accurate estimate of an environmental signal by being a member of a social group and consequently gains an individual benefit.  As such, it seems very plausible that these computationally efficient groups could be sustained by individual selfishness.  However, in the case of the all-to-all network we have described above (with asynchronous updating) it is easy to see how selfishness may cause a problem.  The optimal strategy for an individual is to have $k=1$ or no inertia.  In this way the agent can immediately adopt the group mean.  However, the $k=1$ strategy leads to suboptimal group performance as individuals immediately throw away their independent samples.  What happens in more restricted networks?  Are there topologies where we get ESS?\\
+\\
+Additionally, one can imagine complicating the model.  What happens if $t=0$ signals are not independent and near-neighbors perceive correlated signals?  What happens if communication noise is parametrized by the number of input sources or some other context dependent quantity?
+
+
+%Beyond coordinated acrobatics and rapid predation response, we are accruing evidence that social collectives have a significant computational advantage over their constituent members.  Decision making tasks demonstrate that these groups are not only able to transfer information, but are able to pool and process it as well.  This increased computational   This leaves us with the natural question of how--how are groups able to make better decisions?  What are the fundamental limits on this increased computational capacity?\\
+%\\
+%
+%There has been a great deal of work recently on the formation of consensus in groups, both in discrete choice tasks (science paper) and continuous choice tasks (kurymoto oscillator papers).  These works have demonstrated that groups are able to achieve rapid consensus and have highlighted both the robust nature of these dynamics and the central role of uninformed individuals in decision making process.  While this is related, our current question is more complex.  At the individual level, do I make a better decision as a result of my group context?  This result is trivial in a perfect world, but far from clear in the case of noise-limited bandwidth.\\
+%\\
+%
+%
+%\subsection*{Note 1}
+%
+%Note on Limited Bandwith Communication:
+%
+%As I mentioned on our skype call, I have spent a great deal of time this summer thinking about problems related to information pooling distributed biological systems (like our fish schools).  Specifically I have been trying to understand what are optimal individual strategies for estimating the true state of the world given bandwidth-limited communication with my neighbors.  I could be wrong, but to my knowledge, and to the knowledge of those I have talked to about this, there seems to be very known about the computational and informational tradeoffs in these systems, particularly given intragroup competition. \\
+%\\
+%
+%I have been thinking primarily about two cases -- one in which the bandwidth limitation comes in the form of noise, and another in which it is the result of a limited signaling vocabulary.  I have made some progress on this, but let me walk you the first iteration of this problem, as I think it is both straightforward and highlights many of the challenges I am working on as I try to push forward with this. \\
+%\\
+%
+%Let us take the simple case of N agents that are connected in some undirected communication network given by the adjacency matrix A.  At t=0, each individual makes some noisy sensory measurement of some environmental quantity of interest (or the relevant signal it indicates).  Let us assume, for a first pass that these are normally distributed around the true value $\psi$.  Without loss of generality we will set $\psi = 0$ for this example.  As time progresses, individuals talk to one another and can update their estimate based upon information from others.  So if I am one such individual, what should I do?  In the perfect case everyone received independent samples, I can talk to everyone, and I can get their estimate perfectly.  In this case, I simply adopt the group mean and we are done.  I have my best answer.  But what happens when I can't talk to everyone?  What happens when I only get noisy information from my neighbors? Here things get more complicated.  One strategy might be to simply update my opinion like a linear filter: \\
+%\\
+%
+%put in kalman-esc equation here.\\
+%\\
+%
+%Given this update rule a few things should be clear.  First, the variance of the group will decrease, but as the original information is lost from the system, the group's estimate will begin a random walk.  Second, if everyone listens for multiple iterations before updating, or only updates very slowly, our peak accuracy should be better, however it will take longer to get to this peak. \\
+%\\
+%
+%show fig \\
+%\\
+%
+%While the t -> infinity behavior isn't necessarily a problem (it imposes a timescale for decision making) we can slightly append update rule to include our original estimate.  In this way we anchor the system in the rough neighborhood of the true answer, but also prevent the variance from becoming extremely small. \\
+%\\
+%
+%show fig \\
+%\\
+%
+%From here, it is difficult to say what constitutes an "optimal strategy".  There is no clear cost function.  I want to do well within my group, but I also want my group to do well.  More global questions are easier to answer.  Given a group structure what is the k that minimizes the average distance of each individual's opinion from the true mean?  Given a k, what is the optimal group structure?  This second question is particularly interesting if we allow the initial samples to be correlated with a covariance that decays with graph distance.  In this case very compact graphs may pool information well, but have a strongly biased t=0 sampling.  Dilute graphs, conversely, have more unbiased sampling, but are very inefficient at pooling the resulting information. \\
+%\\
+%
+%Rather than assuming that we communicate noisy information, an alternative model, would be one in which we communicate with one of a limited number of signals.  In an extreme case, what if individuals can only exchange a convey a one bit representation of the real valued estimate that they possess internally? \\
+%\\
+%
+%The number of questions in this vein of thinking seems huge.  How well can an individual do with a fixed update rule?  What about if his update rule can be parametrized by some feature of the incoming signals (e.g. their variance)?  As individuals communicate, their opinions become more correlated.  In the low-bandwidth (high compression) regime, could there be a significant benefit to this?  How could a group know when it has thrown all of the information out of the system and is now talking about nothing?  Are there stable selfish strategies or does group computation require group cooperation? \\
+%\\
+%
+%I am continuing to work on this, so I will undoubtedly have more questions and thoughts in the coming weeks.  I would love your input and feedback.  Cheers! \\
+%\\
+%
+%
+%\subsection*{Note 2:}
+%
+%Beyond coordinated acrobatics and rapid information transfer, we are accruing evidence that social collectives have a significant computational advantage over their constituent members.  Decision making tasks demonstrate that these groups are not only able to transfer information, but are able to pool and process it as well.  This leaves us with the natural question of how--how are groups able to make better decisions?  What are the fundamental limits on this increased computational capacity?\\
+%\\
+%
+%There has been a great deal of work recently on the formation of consensus in groups, both in discrete choice tasks (science paper) and continuous choice tasks (kurymoto oscillator papers).  These works have demonstrated that groups are able to achieve rapid consensus and have highlighted both the robust nature of these dynamics and the central role of uninformed individuals in decision making process.  While this is related, our current question is more complex.  At the individual level, do I make a better decision as a result of my group context?  This result is trivial in a perfect world, but far from clear in the case of noise-limited bandwidth.\\
+%\\
+%
+%Let us take the toy example of N agents, each of whom receive a noisy measurement of some external signal psi.  These agents may then talk to one another, but these messages too are noisy.  Can I still use this communication network to beat down my original measurement noise?  Can I, by virtue of being embedded in a group, achieve a better SNR?  If so, under what conditions and how might nature have reached that point?\\
+%\\
+%
+%Returning to our example, let us first take the linear case where an individual updates its opinion given the following update rule.  Note hear we are assuming continuous time so this is an instantaneous update.\\
+%\\
+%
+%insert update equation. \\
+%\\
+
+%after conclusion
+
+%\end{multicols}
+
+\vspace{10pt}
+\hrule
+
+\vspace{15pt}
+
+\end{document}
