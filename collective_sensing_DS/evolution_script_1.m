@@ -1,6 +1,6 @@
 %quick_script.m  for a single parameter scan
 
-addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/'))
+addpath(genpath('/Users/andrewhartnett/Documents/git/context_dependence/'))
 
 clear y3SAVEneg
 clear y3SAVEpos
