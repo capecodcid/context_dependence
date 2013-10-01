@@ -1,6 +1,6 @@
 %quick_script.m  for a single parameter scan
 
-addpath(genpath('/Users/andrewhartnett/Documents/git/context_dependence/'))
+addpath(genpath('/Users/andrewhartnett/Documents/git/context_dependence/collective_sensing_DS/'))
 
 clear y3SAVEneg
 clear y3SAVEpos
