@@ -52,7 +52,9 @@ for t = 2:T/h
 %     end
     w = normrnd(0, w_sigma, [1,N]);
     %inputs = k/N*sum(y(t-1,:));
-    for id = 1:N
+    ids = randperm(N);
+    for i = 1:N
+        id = ids(i);
         inputs = (ks(id)/sum(adj(:,id)))*sum(adj(:,id).*y(t-1,:)');
         y(t,id) = (1-ks(id))*y(t-1,id) + inputs*h + ks(id)*w(id);  % do I want to change up the way noise is incorporated
     end
