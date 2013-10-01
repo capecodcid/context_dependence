@@ -33,7 +33,7 @@ k0 = ones(N,1)*k0;
 ks = generate_ks(k0, k_sigma);
 ks = ks';
 
-generations = 2;
+generations = 20;
 
 for gen=1:generations
     %N = Ns(kct);
