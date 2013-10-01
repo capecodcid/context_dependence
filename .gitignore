@@ -18,8 +18,8 @@ xcuserdata
 CVS
 
 # figures
-.png
-.fig
+*.png
+*.fig
 
 # matlab junk
-.m~
+*.m~
