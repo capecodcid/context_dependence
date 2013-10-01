@@ -1,6 +1,7 @@
 %quick_script.m  for a single parameter scan
 
-addpath(genpath('/Users/andrewhartnett/Documents/git/context_dependence/collective_sensing_DS/'))
+addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/collective_sensing_DS/'))
+addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/randRegGraph/randRegGraph/'))
 
 clear y3SAVEneg
 clear y3SAVEpos
@@ -45,9 +46,9 @@ for gen=1:generations
     psi = signal;
     
     for i = 1:numRuns
-        %A = createRandRegGraph(N, degree);  % generate a new graph each run
-        %A = full(A);
-        A = ones(N);
+        A = createRandRegGraph(N, degree);  % generate a new graph each run
+        A = full(A);
+        %A = ones(N);
         [~, ~, ~, y] = collective_sensing_DS_evolution_func_async(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma,'N', N, 'psi', psi,'toplot',0);
         %mean_err_pos(i,:) = abs(mean(y,2)-psi);
         %my_err_pos(i,:) = abs(y(:,3)-psi);
@@ -61,9 +62,9 @@ for gen=1:generations
     psi = -signal;
     
     for i = 1:numRuns
-        %A = createRandRegGraph(N, degree);  % generate a new graph each run
-        %A = full(A);
-        A = ones(N);
+        A = createRandRegGraph(N, degree);  % generate a new graph each run
+        A = full(A);
+        %A = ones(N);
         [~, ~, ~, y] = collective_sensing_DS_evolution_func_async(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma, 'N', N, 'psi', psi,'toplot',0);
         %mean_err_neg(i,:) = abs(mean(y,2)-psi);
         %my_err_neg(i,:) = abs(y(:,3)-psi);
@@ -107,7 +108,7 @@ for gen=1:generations
     plot(ks,fitness,'o')
     xlim([0,0.35])
     ylim([0,170])
-    saveas(h,strcat('async_generation_meanfield_small_mute_',num2str(gen),'.png'))
+    saveas(h,strcat('async_generation_k3_small_mute_',num2str(gen),'.png'))
     
     
     
