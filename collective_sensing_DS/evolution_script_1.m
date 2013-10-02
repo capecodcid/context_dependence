@@ -111,7 +111,7 @@ for gen=1:generations
     plot(ks,fitness,'o')
     xlim([0,0.35])
     ylim([0,170])
-    saveas(h,strcat('async_k0_03_meanfield_small_mute_',num2str(gen),'.png'))
+    saveas(h,strcat('async_k0_03_meanfield_rank_small_mute_',num2str(gen),'.png'))
     
     
     
