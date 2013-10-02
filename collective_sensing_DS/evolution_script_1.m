@@ -1,5 +1,5 @@
 %quick_script.m  for a single parameter scan
-
+addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/'));
 addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/collective_sensing_DS/'))
 addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/randRegGraph/randRegGraph/'))
 
@@ -34,7 +34,7 @@ k0 = ones(N,1)*k0;
 ks = generate_ks(k0, k_sigma);
 ks = ks';
 
-generations = 120;
+generations = 1;
 
 for gen=1:generations
     %N = Ns(kct);
@@ -103,6 +103,9 @@ for gen=1:generations
     k_record(gen,:) = ks; 
     
     fitness = sum(info);
+    [donotuse, ix]=sort(fitness);
+    [donotuse, yourranks]=sort(ix);
+    fitness = yourranks;
     
     h = figure('visible','off')
     plot(ks,fitness,'o')
