@@ -34,7 +34,7 @@ k0 = ones(N,1)*k0;
 ks = generate_ks(k0, k_sigma);
 ks = ks';
 
-generations = 1;
+generations = 120;
 
 for gen=1:generations
     %N = Ns(kct);
