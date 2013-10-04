@@ -118,6 +118,9 @@ for gen=1:generations
             fitness(i) = 0;
         end
     end
+    [donotuse, ix]=sort(fitness);
+    [donotuse, yourranks]=sort(ix);
+    fitness = yourranks;
     fitness = fitness/sum(fitness);
     
     %fitness = sum(info);
@@ -129,7 +132,7 @@ for gen=1:generations
     plot(ks,fitness,'o')
     xlim([0,0.35])
     ylim([0,0.05])
-    saveas(h,strcat('async_k0_005_meanfield_fit_06_speed_',num2str(gen),'.png'))
+    saveas(h,strcat('async_k0_005_meanfield_fit_06_speedrank_',num2str(gen),'.png'))
     
     
     
