@@ -35,7 +35,7 @@ mutation = 0.01;    % mutation rate
 target_info = 0.6;  % bits
 
 signal = 0.035;
-k0 = 0.05;  % starting k
+k0 = 0.1;  % starting k
 k0 = ones(N,1)*k0;
 
 ks = generate_ks(k0, k_sigma);
@@ -130,9 +130,9 @@ for gen=1:generations
     
     h = figure('visible','off')
     plot(ks,fitness,'o')
-    xlim([0,0.35])
-    ylim([0,0.05])
-    saveas(h,strcat('async_k0_005_meanfield_fit_06_speedrank_',num2str(gen),'.png'))
+    xlim([0,1])
+    ylim([0,0.04])
+    saveas(h,strcat('async_k0_01_meanfield_fit_06_speedrank_',num2str(gen),'.png'))
     
     
     
