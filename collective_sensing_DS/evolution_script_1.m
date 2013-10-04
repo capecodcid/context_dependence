@@ -3,6 +3,11 @@ addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/'));
 addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/collective_sensing_DS/'))
 addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/randRegGraph/randRegGraph/'))
 
+% addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/'));
+% addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/'))
+% addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/randRegGraph/randRegGraph/'))
+
+
 clear y3SAVEneg
 clear y3SAVEpos
 clear ybarSAVEneg
@@ -17,7 +22,7 @@ clear ySAVEpos
 degree = 3;
 
 numRuns = 1000;     % per generation per outcome
-T = 150;                % per discussion
+T = 70;                % per discussion
 mean_err = zeros(numRuns,T);
 my_err = mean_err;
 w_sigma = 0.05;    % dynamic (talking) noise
@@ -27,8 +32,10 @@ sigma= 0.1;         % quenched noise
 k_sigma = 0.05;    % sd for variablity in ks
 mutation = 0.01;    % mutation rate
 
+target_info = 0.6;  % bits
+
 signal = 0.035;
-k0 = 0.3;  % starting k
+k0 = 0.05;  % starting k
 k0 = ones(N,1)*k0;
 
 ks = generate_ks(k0, k_sigma);
@@ -100,18 +107,29 @@ for gen=1:generations
     end
     info = squeeze(info);
     
-    k_record(gen,:) = ks; 
+    k_record(gen,:) = ks;
     
-    fitness = sum(info);
-    [donotuse, ix]=sort(fitness);
-    [donotuse, yourranks]=sort(ix);
-    fitness = yourranks;
+    fitness = zeros(N,1);
+    for i = 1:N
+        tmp = find(info(:,i)>target_info,1);
+        if ~isempty(tmp)
+            fitness(i) = 1/tmp;
+        else
+            fitness(i) = 0;
+        end
+    end
+    fitness = fitness/sum(fitness);
+    
+    %fitness = sum(info);
+    %[donotuse, ix]=sort(fitness);
+    %[donotuse, yourranks]=sort(ix);
+    %fitness = yourranks;
     
     h = figure('visible','off')
     plot(ks,fitness,'o')
     xlim([0,0.35])
-    ylim([0,170])
-    saveas(h,strcat('async_k0_03_meanfield_rank_small_mute_',num2str(gen),'.png'))
+    ylim([0,0.05])
+    saveas(h,strcat('async_k0_005_meanfield_fit_06_speed_',num2str(gen),'.png'))
     
     
     
