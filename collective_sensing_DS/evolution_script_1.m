@@ -32,7 +32,7 @@ sigma= 0.1;         % quenched noise
 k_sigma = 0.05;    % sd for variablity in ks
 mutation = 0.01;    % mutation rate
 
-target_info = 0.6;  % bits
+target_info = 0.5;  % bits
 
 signal = 0.035;
 k0 = 0.2;  % starting k
@@ -132,7 +132,7 @@ for gen=1:generations
     plot(ks,fitness,'o')
     xlim([0,1])
     ylim([0,0.04])
-    saveas(h,strcat('async_k0_01_meanfield_fit_06_speedrank_v2_',num2str(gen),'.png'))
+    saveas(h,strcat('async_k0_01_meanfield_fit_05_speedrank_v1_',num2str(gen),'.png'))
     
     
     
