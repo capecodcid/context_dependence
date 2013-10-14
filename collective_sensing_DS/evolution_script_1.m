@@ -41,7 +41,7 @@ k0 = ones(N,1)*k0;
 ks = generate_ks(k0, k_sigma);
 ks = ks';
 
-generations = 250;
+generations = 1500;
 
 for gen=1:generations
     %N = Ns(kct);
@@ -132,7 +132,7 @@ for gen=1:generations
     plot(ks,fitness,'o')
     xlim([0,1])
     ylim([0,0.04])
-    saveas(h,strcat('async_k0_01_meanfield_fit_05_speedrank_v1_',num2str(gen),'.png'))
+    saveas(h,strcat('async_k0_01_meanfield_fit_05_speedrank_v2_',num2str(gen),'.png'))
     
     
     
