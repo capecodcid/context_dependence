@@ -1,0 +1,178 @@
+\documentclass{article}
+\usepackage[margin=2.6cm]{geometry}
+
+\geometry{letterpaper}
+
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{mathrsfs}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{dblfloatfix}
+\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\newcommand{\pa}{\delta}
+
+
+\newcommand{\x}{{\bf x}}
+\newcommand{\h}{{\bf h}}
+\newcommand{\Z}{{\cal Z}}
+\newcommand{\N}{{\cal N}}
+\newcommand{\R}{{\cal R}}
+\newcommand{\F}{{\cal F}}
+\newcommand{\Ft}{{\cal F}_{\theta}}
+\newcommand{\Zt}{{\cal Z}_{\theta}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\Et}{\mathcal{E}_{\theta}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bx}{{\bf b}}
+\newcommand{\ch}{{\bf c}}
+\newcommand{\W}{{\bf W}}
+\newcommand{\U}{{\bf U}}
+\newcommand{\V}{{\bf V}}
+\newcommand{\bT}{{\bf b}^{T}}
+\newcommand{\cT}{{\bf c}^{T}}
+\newcommand{\xT}{{\bf x}^{T}}
+\newcommand{\hT}{{\bf h}^{T}}
+\newcommand{\ptheta}{\pa{\theta}}
+
+\newcommand{\la}{\left\langle}
+\newcommand{\ra}{\right\rangle}
+\newcommand{\defeq}{\mathrel{\mathop:}=}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+
+\newcommand{\xtilde}{\tilde{x}}
+\newcommand{\Xtilde}{\tilde{X}}
+\newcommand{\pcx}{p\lp \xtilde | x \rp}
+\newcommand{\px}{p\lp x \rp}
+\newcommand{\ptx}{p\lp \xtilde \rp}
+\newcommand{\Lagr}{\mathcal{L}}
+\newcommand{\B}{\beta}
+\newcommand{\logpcxptx}{\log{\lb \frac{\pcx}{\ptx} \rb}}
+\newcommand{\pcy}{p\lp \xtilde | y \rp}
+\newcommand{\py}{p\lp y \rp}
+\newcommand{\logpcyptx}{\log{\lb \frac{\pcy}{\ptx} \rb}}
+
+\newcommand{\pcxI}{p\lp \xtilde = \xtilde^* | x = x^* \rp}
+\newcommand{\pcxi}{p\lp \xtilde^* | x^* \rp}
+\newcommand{\pxi}{p\lp x^* \rp}
+\newcommand{\ptxi}{p\lp \xtilde^* \rp}
+\newcommand{\logpcxptxi}{\log{\lb \frac{\pcxi}{\ptxi} \rb}}
+\newcommand{\pyxi}{p\lp y | x^* \rp}
+\newcommand{\logpycpyi}{\log{\lb \frac{p\lp y | \xtilde^*\rp}{\py} \rb}}
+\newcommand{\logpyxpyi}{\log{\lb \frac{p\lp y | x^*\rp}{\py} \rb}}
+\newcommand{\KL}{D_{KL}}
+\newcommand{\pyx}{p\lp y | x \rp}
+\newcommand{\pyc}{p\lp y | \xtilde \rp}
+\newcommand{\logpycpyEXP}{\log{\lb \frac{\sum_{x'}{p\lp y | x'\rp p\lp x'|\xtilde^* \rp}}{\py} \rb}}
+
+
+\title{Inverting the Information Bottleneck}
+
+\author{\textbf{ATH and DS} \\}
+
+\date{October 31, 2013}
+
+\begin{document}
+
+\maketitle
+
+\captionsetup{labelfont=bf, font=footnotesize}
+
+ 
+
+%\textbf{In recent work examining consensus dynamics }
+
+ 
+
+\vspace{10pt}
+
+\hrule  %Horizontal Line
+
+\vspace{10pt}
+
+ 
+
+%\begin{multicols}{2}
+%document goes here
+
+\subsection*{The Information Bottleneck}
+In their paper, \emph{The Information Bottleneck Method}, Tishby, Pereira, and Bialek outline a principled method for choosing a distortion function given another relevant variable.  The goal is very straightforward---to map signals $x \in X$ to a set of codewords $\xtilde \in \Xtilde$, such that we retain a much information as possible about another signal $y \in Y$.  The term `bottleneck' implies that $|X| > |\Xtilde|$.
+
+In order to find this mapping, here is a set of conditionals---$\pcx$, we must minimize the functional:
+
+\begin{align}
+\Lagr &= I(X,\Xtilde) - \B I(\Xtilde,Y) - \sum_{x,\xtilde}\lambda(x)\pcx \nonumber \\
+	 &= \sum_{x,\xtilde} \pcx \px \logpcxptx - \B\sum_{\xtilde,y} \pcy \py \logpcyptx - \sum_{x,\xtilde}\lambda(x)\pcx
+\end{align}
+
+with respect to the partitioning $\{\pcx\}$.  The third term is simply a normalization constraint at each x.  Taking derivatives with respect to each conditional for a given $x$ and $\xtilde$, we get:
+
+\begin{align}
+\label{eq:functional}
+\frac{\pa \Lagr}{\pa \pcxI} & = 0 \nonumber \\
+& = \pxi \lp \logpcxptxi - \B \sum_{y} \pyxi \logpycpyi - \frac{\lambda(x^*)}{\pxi}  \rp \nonumber \\
+& = \pxi \lp \logpcxptxi - \B \sum_{y} \pyxi \log{\lb\frac{p\lp y | x^* \rp}{p\lp y | \xtilde^* \rp}\rb} - \tilde{\lambda}(x^*)  \rp
+\end{align}
+
+Where we've just done some rearranging so that $\tilde{\lambda}(x^*)$ contains all the tens independent of $\xtilde$.
+
+\be
+\tilde{\lambda}(x^*) = \frac{\lambda(x^*)}{\pxi} - \B \sum_{y} \pyxi \logpyxpyi
+\ee
+
+Solving for $\pcx$ we see that our distortion measure has become the KL-divergence between the mapping of $Y \rightarrow X$ and the mapping of $Y \rightarrow \Xtilde$: 
+
+\begin{align}
+\pcx & = \frac{1}{\Z(x,\B)} \ptx \exp{\lp \sum_y \pyx \log{\lb\frac{\pyx}{\pyc}\rb}\rp} \nonumber \\
+& = \frac{1}{\Z(x,\B)} \ptx \exp{\lp \KL\lb \pyx || \pyc \rb \rp}
+\end{align}
+
+Where $\Z(x,\B)$ is the usual normalization.
+
+\be
+\Z(x,\B) = \sum_{\xtilde} \ptx \exp{\lp \KL\lb \pyx || \pyc \rb \rp}
+\ee
+
+From here, Tisby et al. go on to explain an iterative algorithm for finding $\{\pcx\}$, $\{\ptx\}$, and $\{\pyc\}$ at every value of $\B$.  While this may end up being important, we will forgo a review at this time. 
+
+
+\subsection*{Finding Relevance}
+
+Working through the information bottleneck posses a natural follow up question---if I have some mapping $\{\pcx\}$ that arose as the result of relevant quantization, can I invert the process and find $\{\pyc\}$ and/or $\{\pyx\}$?  As stated the problem is underdetermined, but we can begin by asking what else do I need to know about $\py$ in order to reach a solution\footnotemark.
+
+\footnotetext{We will leave for a moment the question of whether or not such a solution is useful.}
+
+Let us begin from the derivative of the functional in eq. \ref{eq:functional}.
+
+\be
+\frac{\pa \Lagr}{\pa \pcxI} = 0 = \pxi \lp \logpcxptxi - \B \sum_{y} \pyxi \logpycpyi - \frac{\lambda(x^*)}{\pxi}  \rp
+\ee
+
+Now assuming that we know $\pcxi$, $\pxi$, $\ptxi$, and $p(x^*)$, we can simplify the above expression.
+
+\begin{align}
+\label{eq:step_one}
+\sum_{y} \pyxi \logpycpyi &= \frac{1}{\B} \lb \logpcxptxi - \frac{\lambda(x^*)}{\pxi} \rb \nonumber\\
+& = \frac{1}{\B} \lb \eta(x^*,\xtilde^*) - \Lambda(x^*)\rb \nonumber\\
+& = \frac{1}{\B} \Phi(x^*,\xtilde^*) \nonumber \\
+\sum_{y} \pyxi \logpycpyEXP& = \frac{1}{\B} \Phi(x^*,\xtilde^*) \quad  \forall \ x^*,\xtilde^*
+\end{align}
+
+We have some additional constraints corresponding to normalization and the fact that $\Xtilde$ cannot encode anything about $Y$ that is not encoded by $X$.  At this point, it seems the first question one should ask is---given the correct $\B$ and the correct cardinality of $Y$, can one find a set $\{\pyx\}$ that satisfy eq. \ref{eq:step_one}.  We have $NM$ equations where $N = |X|$ and $M = |\Xtilde|$ and for each one $\Phi(x^*,\xtilde^*)$ is a known scalar.  My hope is that this actually highly degenerate and there are many such sets.  From there we can choose a set with desirable external properties.
+
+I am going to set about trying to work through a small example at this point, but any help or input would be much appreciated, especially with regards to how to solve the system of equations given by eq. \ref{eq:step_one}.
+
+\vspace{10pt}
+\hrule
+
+\vspace{15pt}
+
+\end{document}

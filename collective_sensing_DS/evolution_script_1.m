@@ -1,11 +1,11 @@
 %quick_script.m  for a single parameter scan
-addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/'));
-addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/collective_sensing_DS/'))
-addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/randRegGraph/randRegGraph/'))
-
-% addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/'));
-% addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/'))
-% addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/randRegGraph/randRegGraph/'))
+% addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/'));
+% addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/collective_sensing_DS/'))
+% addpath(genpath('/Users/ahartnet/Documents/git/context_dependence/randRegGraph/randRegGraph/'))
+% 
+addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/'));
+addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/collective_sensing_DS/'))
+addpath(genpath('/Users/andrewhartnett/Documents/MATLAB/context_dependence/randRegGraph/randRegGraph/'))
 
 
 clear y3SAVEneg
@@ -32,7 +32,7 @@ sigma= 0.1;         % quenched noise
 k_sigma = 0.05;    % sd for variablity in ks
 mutation = 0.01;    % mutation rate
 
-target_info = 0.5;  % bits
+target_info = 0.65;  % bits
 
 signal = 0.035;
 k0 = 0.2;  % starting k
@@ -41,8 +41,12 @@ k0 = ones(N,1)*k0;
 ks = generate_ks(k0, k_sigma);
 ks = ks';
 
-generations = 1500;
+generations = 10;
 
+mean_k = zeros(1,generations);
+sd_k = mean_k;
+
+tic
 for gen=1:generations
     %N = Ns(kct);
     %k1 = k1s(kct);
@@ -56,7 +60,8 @@ for gen=1:generations
         %A = createRandRegGraph(N, degree);  % generate a new graph each run
         %A = full(A);
         A = ones(N);
-        [~, ~, ~, y] = collective_sensing_DS_evolution_func_async(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma,'N', N, 'psi', psi,'toplot',0);
+        %[~, ~, ~, y] = collective_sensing_DS_evolution_func_async(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma,'N', N, 'psi', psi,'toplot',0);
+        [~, ~, ~, y] = info_loss_update(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma, 'psi', psi,'toplot',0, 'meanfield',1);
         %mean_err_pos(i,:) = abs(mean(y,2)-psi);
         %my_err_pos(i,:) = abs(y(:,3)-psi);
         %y3SAVEpos(i,:) = y(:,1);
@@ -72,7 +77,8 @@ for gen=1:generations
         %A = createRandRegGraph(N, degree);  % generate a new graph each run
         %A = full(A);
         A = ones(N);
-        [~, ~, ~, y] = collective_sensing_DS_evolution_func_async(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma, 'N', N, 'psi', psi,'toplot',0);
+        %[~, ~, ~, y] = collective_sensing_DS_evolution_func_async(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma, 'N', N, 'psi', psi,'toplot',0);
+        [~, ~, ~, y] = info_loss_update(ks, A, 'T', T,'w_sigma',w_sigma, 'sigma',sigma, 'psi', psi,'toplot',0,'meanfield',1);
         %mean_err_neg(i,:) = abs(mean(y,2)-psi);
         %my_err_neg(i,:) = abs(y(:,3)-psi);
         %y3SAVEneg(i,:) = y(:,1);
@@ -128,12 +134,16 @@ for gen=1:generations
     %[donotuse, yourranks]=sort(ix);
     %fitness = yourranks;
     
-    h = figure('visible','off')
-    plot(ks,fitness,'o')
-    xlim([0,1])
-    ylim([0,0.04])
-    saveas(h,strcat('async_k0_01_meanfield_fit_05_speedrank_v2_',num2str(gen),'.png'))
+    mean_k(gen) = mean(ks);
+    sd_k(gen) = std(ks);
     
+%     h = figure('visible','off')
+     figure()
+     plot(ks,fitness,'o')
+     xlim([0,1])
+     ylim([0,0.04])
+%     saveas(h,strcat('async_k0_01_meanfield_fit_05_speedrank_v2_',num2str(gen),'.png'))
+%     
     
     
     ks = randsample(ks,100,true,fitness);
@@ -146,7 +156,7 @@ for gen=1:generations
     
    
 end
-
+toc
 %info = squeeze(info);
 % check above - fix below
 

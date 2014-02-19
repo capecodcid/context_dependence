@@ -212,4 +212,29 @@ Additionally, one can imagine complicating the model.  What happens if $t=0$ sig
 
 \vspace{15pt}
 
+
+\subsection*{Introduction 2:}
+While it has been given many names---collective intelligence, group-think, wisdom of the crowds, vox populi, etc.---the simple idea that groups can compute or know something inaccessible to an individual agent is now widely accepted, both in academia and the general populous.  In this note, however I would like to draw some attention to a special subset of collective intelligence problems that remain poorly understood.\\\\In the well-understood case, the each agent in the population performs some action.  In concert, the actions of the entire population then encode something greater than that encoded by an individual.  What is often glossed over, however, is how we extract this group level information.   In human systems, an action can be voting or writing down our best guess---and we extract the group answer by tallying votes or averaging guesses.  In neural systems, populations of neurons (often many different specialized cell types) that accurately code a signal are read out by downstream neurons.  Because in both human and neuronal systems readouts are naturally present, we often under-examine systems where no omniscient readout exists.\\\\In a collective system without an apparent readout, how can we achieve social intelligence?  It seems there are only two answers.  Either, motion or some other coupled dynamic property encodes the information for everyone, or each individual component is explicitly its own (selfish?) readout.\\
+\\
+
+\subsection*{A Contrived Example:}
+Let us take a set $N$ agents which are each able to sample some external signal $\psi$ for a fixed period time, however they do so very poorly.  After this sampling period, each agent will have an internal estimate $y_i^0$.  At this point agents will cease sampling and begin to talk with on another, however, communication too is noisy.
+\be
+y_{i}^{t=0} = \N(\psi,\sigma)
+\ee
+On can think of these $y^0$s as an expectation that each individual arrives at from accrued sensory information.  At this point we can think of $\sigma$ as a source of quenched noise.  Agents then are begin speaking with one another in order to arrive at a better estimate.  In our simplest scenario we can think of a simple linear update:
+\be
+\label{dynamics}
+y_{i}^{t+1} = (1-k)y_i^t + k\lp \frac{1}{N}\sum_{i}{y_{i}^{t}} + \eta \rp
+\ee
+where $\eta = \N(0,\sigma_{w})$ is our dynamic, communication noise and $(1-k)$ is a behavioral inertia.  Clearly, this represents an oversimplified reality as here we gather information and then communicate, however we think it is both illustrative and informative.  The interesting regime is where the quenched noise is greater than the communication noise which is greater than the quenched noise beat down by $1/\sqrt{N}$.  Several features of eq. \ref{dynamics} should immediately be clear.  First, there is nothing anchoring agents to the original signal so for $\sigma_{w} > 0$ we will eventually drift off and entirely lose $\psi$.  This is entirely analogous to the children's game telephone.   We could easily add another term to eq. \ref{dynamics}, but for now we will use the noise to set our timescale.  Second, the dynamics will take every agent to the same average value, so everyone ends up with the same answer.  In other words, after sufficient time, the informational content of a given agent is the same as that of the entire population.
+
+
+\subsection*{Weak Pinning:}
+David -- can you cover this again?  It made sense at the time but less so now.
+
+\vspace{10pt}
+\hrule
+
+\vspace{15pt}
 \end{document}
